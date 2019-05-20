@@ -5,6 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import fr.diginamic.exception.TechnicalException;
+
+/**
+ * Classe pour se connecter à la base
+ * 
+ * @author Cécile Peyras
+ *
+ */
 public class TestConnexionJdbc {
 
 	public static void main(String[] args) {
@@ -18,21 +26,22 @@ public class TestConnexionJdbc {
 		try {
 			Class.forName(driverName);
 		} catch (ClassNotFoundException e) {
-			System.out.println(e.getMessage());
+			throw new TechnicalException("Le driver JDBC" + driverName + " n'a pas été trouvé");
 		}
 
-		Connection maConnection = null;
+		Connection maConnexion = null;
 
 		try {
-			maConnection = DriverManager.getConnection(urlName, userName, password);
-			System.out.println(maConnection);
+			maConnexion = DriverManager.getConnection(urlName, userName, password);
+			System.out.println(maConnexion);
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new TechnicalException("La connexion à la basse de données n'a  pas pu s'établir");
 		} finally {
 			try {
-				maConnection.close();
+				maConnexion.close();
 			} catch (SQLException e) {
-				System.out.println(e.getMessage());
+				throw new TechnicalException(
+						"La fermeture de la connexion à la base de données n'a pas pu se réaliser");
 			}
 		}
 
