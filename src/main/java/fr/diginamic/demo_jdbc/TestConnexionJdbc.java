@@ -26,7 +26,7 @@ public class TestConnexionJdbc {
 		try {
 			Class.forName(driverName);
 		} catch (ClassNotFoundException e) {
-			throw new TechnicalException("Le driver JDBC" + driverName + " n'a pas été trouvé");
+			throw new TechnicalException("Le driver JDBC" + driverName + " n'a pas été trouvé", e);
 		}
 
 		Connection maConnexion = null;
@@ -35,13 +35,13 @@ public class TestConnexionJdbc {
 			maConnexion = DriverManager.getConnection(urlName, userName, password);
 			System.out.println(maConnexion);
 		} catch (SQLException e) {
-			throw new TechnicalException("La connexion à la basse de données n'a  pas pu s'établir");
+			throw new TechnicalException("La connexion à la basse de données n'a  pas pu s'établir", e);
 		} finally {
 			try {
 				maConnexion.close();
 			} catch (SQLException e) {
-				throw new TechnicalException(
-						"La fermeture de la connexion à la base de données n'a pas pu se réaliser");
+				throw new TechnicalException("La fermeture de la connexion à la base de données n'a pas pu se réaliser",
+						e);
 			}
 		}
 
