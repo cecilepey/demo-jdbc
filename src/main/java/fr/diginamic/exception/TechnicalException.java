@@ -14,7 +14,7 @@ public class TechnicalException extends RuntimeException {
 	/**
 	 * Constructeur
 	 * 
-	 * @param arg0
+	 * @param message
 	 */
 	public TechnicalException(String message) {
 		super(message);
@@ -24,8 +24,8 @@ public class TechnicalException extends RuntimeException {
 	/**
 	 * Constructeur
 	 * 
-	 * @param arg0
-	 * @param arg1
+	 * @param message
+	 * @param cause
 	 */
 	public TechnicalException(String message, Throwable cause) {
 		super(message, cause);
