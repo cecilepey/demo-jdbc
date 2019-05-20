@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.diginamic.exception.TechnicalException;
 
 /**
@@ -17,6 +20,8 @@ import fr.diginamic.exception.TechnicalException;
  *
  */
 public class TestConnexionJdbc {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger("monLogger");
 
 	public static void main(String[] args) {
 
@@ -29,15 +34,18 @@ public class TestConnexionJdbc {
 		try {
 			Class.forName(driverName);
 		} catch (ClassNotFoundException e) {
+			LOGGER.error("Le driver JDBC" + driverName + " n'a pas été trouvé", e);
 			throw new TechnicalException("Le driver JDBC" + driverName + " n'a pas été trouvé", e);
 		}
 
 		Connection maConnexion = null;
+		Statement monStatement = null;
+		ResultSet curseur = null;
 
 		try {
 			maConnexion = DriverManager.getConnection(urlName, userName, password);
 			System.out.println(maConnexion);
-			Statement monStatement = maConnexion.createStatement();
+			monStatement = maConnexion.createStatement();
 
 			// Créer les éléments dans le tableau
 
@@ -54,7 +62,7 @@ public class TestConnexionJdbc {
 			// Modifier le prix quand supérieur à 10
 			monStatement.executeUpdate("UPDATE ARTICLE SET PRIX = PRIX*1.25 WHERE PRIX >10");
 
-			ResultSet curseur = monStatement.executeQuery("SELECT ID, DESIGNATION, FOURNISSEUR, PRIX FROM ARTICLE");
+			curseur = monStatement.executeQuery("SELECT ID, DESIGNATION, FOURNISSEUR, PRIX FROM ARTICLE");
 
 			ArrayList<Article> listeArticle = new ArrayList<>();
 
@@ -88,14 +96,23 @@ public class TestConnexionJdbc {
 
 			monStatement.executeUpdate("DELETE FROM ARTICLE");
 
-			curseur.close();
-
 		} catch (SQLException e) {
+			LOGGER.error("La connexion à la basse de données n'a  pas pu s'établir", e);
 			throw new TechnicalException("La connexion à la basse de données n'a  pas pu s'établir", e);
 		} finally {
 			try {
-				maConnexion.close();
+				if (curseur != null) {
+					curseur.close();
+				}
+				if (monStatement != null) {
+					monStatement.close();
+				}
+				if (maConnexion != null) {
+					maConnexion.close();
+				}
+
 			} catch (SQLException e) {
+				LOGGER.error("La fermeture de la connexion à la base de données n'a pas pu se réaliser.", e);
 				throw new TechnicalException("La fermeture de la connexion à la base de données n'a pas pu se réaliser",
 						e);
 			}
