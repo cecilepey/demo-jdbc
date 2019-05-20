@@ -16,7 +16,7 @@ public class TestConnexionJdbc {
 		String password = monFichierConf.getString("database.password");
 
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName(driverName);
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
