@@ -21,8 +21,14 @@ import fr.diginamic.exception.TechnicalException;
  */
 public class TestConnexionJdbc {
 
+	/** LOGGER : Logger */
 	private static final Logger LOGGER = LoggerFactory.getLogger("monLogger");
 
+	/**
+	 * Classe qui gère la connexion
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		ResourceBundle monFichierConf = ResourceBundle.getBundle("database");
